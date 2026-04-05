@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mix Games – صفحة الدفع 💳</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple: #5865f2;
+      --purple-dim: #4752c4;
+      --purple-light: #7289da;
+      --dark: #050608;
+      --dark2: #0d0e1a;
+      --dark3: #12132a;
+      --gold: #ffd700;
+      --gold2: #ffb300;
+      --white: #f0f8ff;
+      --green: #43b581;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--dark);
+      font-family: 'Cairo', sans-serif;
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      overflow-y: auto;
+      padding: 30px 16px;
+    }
+
+    /* Background Effects */
+    .bg-effects {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(88,101,242,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(88,101,242,0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(40px); }
+    }
+
+    .bg-glow-1 {
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(88,101,242,0.15) 0%, transparent 70%);
+      top: -200px; right: -100px;
+      animation: pulse1 6s ease-in-out infinite;
+    }
+
+    .bg-glow-2 {
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(255,215,0,0.08) 0%, transparent 70%);
+      bottom: -150px; left: -100px;
+      animation: pulse2 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse1 { 0%,100%{opacity:0.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.1)} }
+    @keyframes pulse2 { 0%,100%{opacity:0.5;transform:scale(1.1)} 50%{opacity:0.9;transform:scale(1)} }
+
+    /* Card */
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 520px;
+      background: linear-gradient(145deg, rgba(13,14,26,0.97), rgba(5,6,8,0.99));
+      border: 1px solid rgba(88,101,242,0.25);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 0 80px rgba(0,0,0,0.9), 0 0 40px rgba(88,101,242,0.12), inset 0 1px 0 rgba(88,101,242,0.1);
+      animation: cardIn 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+      opacity: 0;
+      transform: translateY(30px) scale(0.97);
+    }
+
+    @keyframes cardIn {
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Header */
+    .card-header {
+      background: linear-gradient(135deg, #0d0f2e 0%, #080a1f 50%, #0e1030 100%);
+      padding: 28px 32px 24px;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(88,101,242,0.2);
+      text-align: center;
+    }
+
+    .back-btn {
+      position: absolute;
+      right: 6px;
+      top: 16px;
+      background: rgba(88,101,242,0.15);
+      border: 1px solid rgba(88,101,242,0.3);
+      border-radius: 10px;
+      color: var(--purple-light);
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 5px 10px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      background: rgba(88,101,242,0.25);
+      border-color: rgba(88,101,242,0.5);
+    }
+
+    .page-title {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 24px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .page-title span { color: var(--gold); }
+
+    .page-sub {
+      font-size: 13px;
+      color: rgba(240,248,255,0.55);
+    }
+
+    /* Steps */
+    .steps-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 32px;
+      background: rgba(88,101,242,0.05);
+      border-bottom: 1px solid rgba(88,101,242,0.1);
+    }
+
+    .step-dot {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
+      border: 2px solid rgba(88,101,242,0.3);
+      color: rgba(240,248,255,0.4);
+      background: rgba(88,101,242,0.05);
+      transition: all 0.3s;
+    }
+
+    .step-dot.active {
+      border-color: var(--purple);
+      color: white;
+      background: var(--purple);
+      box-shadow: 0 0 14px rgba(88,101,242,0.5);
+    }
+
+    .step-dot.done {
+      border-color: var(--green);
+      color: white;
+      background: var(--green);
+    }
+
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: rgba(88,101,242,0.15);
+      max-width: 60px;
+    }
+
+    .step-label {
+      font-size: 10px;
+      color: rgba(240,248,255,0.4);
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    .step-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Body */
+    .card-body { padding: 24px 32px; }
+
+    /* Payment Methods */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--purple-light);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      opacity: 0.8;
+    }
+
+    .payment-info-box {
+      background: linear-gradient(135deg, rgba(255,215,0,0.07), rgba(255,179,0,0.04));
+      border: 1px solid rgba(255,215,0,0.2);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+    }
+
+    .payment-title {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--gold);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .payment-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .payment-method-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: rgba(240,248,255,0.85);
+      background: rgba(255,215,0,0.04);
+      border: 1px solid rgba(255,215,0,0.1);
+      border-radius: 10px;
+      padding: 10px 14px;
+    }
+
+    .method-icon { font-size: 18px; flex-shrink: 0; }
+
+    .payment-number-box {
+      background: rgba(88,101,242,0.08);
+      border: 1px solid rgba(88,101,242,0.2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .payment-number-label {
+      font-size: 12px;
+      color: rgba(240,248,255,0.5);
+      margin-bottom: 3px;
+    }
+
+    .payment-number-value {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--purple-light);
+      letter-spacing: 1px;
+      text-shadow: 0 0 12px rgba(88,101,242,0.4);
+    }
+
+    .copy-btn {
+      background: rgba(88,101,242,0.15);
+      border: 1px solid rgba(88,101,242,0.3);
+      border-radius: 8px;
+      color: var(--purple-light);
+      font-family: 'Cairo', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .copy-btn:hover {
+      background: rgba(88,101,242,0.25);
+    }
+
+    .copy-btn.copied {
+      background: rgba(67,181,129,0.2);
+      border-color: rgba(67,181,129,0.4);
+      color: var(--green);
+    }
+
+    .owner-note {
+      font-size: 12px;
+      color: rgba(240,248,255,0.45);
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    /* Form */
+    .form-section { margin-top: 4px; }
+
+    /* Hidden Netlify form declaration */
+    .netlify-hidden { display: none; }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: rgba(240,248,255,0.7);
+      margin-bottom: 7px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(88,101,242,0.06);
+      border: 1px solid rgba(88,101,242,0.2);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 14px;
+      color: var(--white);
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    .form-input::placeholder { color: rgba(240,248,255,0.25); }
+
+    .form-input:focus {
+      border-color: rgba(88,101,242,0.5);
+      background: rgba(88,101,242,0.1);
+      box-shadow: 0 0 0 3px rgba(88,101,242,0.1);
+    }
+
+    .form-input:invalid:not(:placeholder-shown) {
+      border-color: rgba(255,80,80,0.4);
+    }
+
+    /* Upload Area */
+    .upload-area {
+      width: 100%;
+      background: rgba(88,101,242,0.05);
+      border: 2px dashed rgba(88,101,242,0.25);
+      border-radius: 14px;
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .upload-area:hover, .upload-area.dragover {
+      border-color: rgba(88,101,242,0.5);
+      background: rgba(88,101,242,0.09);
+    }
+
+    .upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .upload-icon { font-size: 32px; margin-bottom: 8px; }
+
+    .upload-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--purple-light);
+      margin-bottom: 4px;
+    }
+
+    .upload-sub {
+      font-size: 11px;
+      color: rgba(240,248,255,0.35);
+    }
+
+    .upload-preview {
+      display: none;
+      margin-top: 12px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .upload-preview img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 1px solid rgba(88,101,242,0.2);
+    }
+
+    /* Price box */
+    .price-box {
+      background: linear-gradient(135deg, rgba(88,101,242,0.1), rgba(71,82,196,0.06));
+      border: 1px solid rgba(88,101,242,0.18);
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .price-box-label { font-size: 13px; color: rgba(240,248,255,0.6); }
+
+    .price-box-value {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--purple-light);
+      text-shadow: 0 0 16px rgba(88,101,242,0.4);
+    }
+
+    /* Submit button */
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #43b581, #2e9c68);
+      border: none;
+      border-radius: 14px;
+      padding: 16px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 18px;
+      font-weight: 900;
+      color: #ffffff;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 30px rgba(67,181,129,0.35), 0 0 60px rgba(67,181,129,0.1);
+      letter-spacing: 0.5px;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      50%, 100% { left: 100%; }
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 40px rgba(67,181,129,0.45);
+    }
+
+    .submit-btn:active { transform: translateY(0); }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Note */
+    .form-note {
+      text-align: center;
+      font-size: 11.5px;
+      color: rgba(240,248,255,0.35);
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    /* Success message */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    .success-msg.show { display: block; }
+
+    .success-icon { font-size: 56px; margin-bottom: 16px; }
+
+    .success-title {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--green);
+      margin-bottom: 10px;
+    }
+
+    .success-text {
+      font-size: 13.5px;
+      color: rgba(240,248,255,0.7);
+      line-height: 1.7;
+    }
+
+    /* Footer */
+    .card-footer {
+      border-top: 1px solid rgba(88,101,242,0.08);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--purple-light);
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(88,101,242,0.4);
+    }
+
+    .brand span { color: rgba(240,248,255,0.5); font-weight: 400; }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(88,101,242,0.15), transparent);
+      margin: 18px 0;
+    }
+
+    @media (max-width: 560px) {
+      .card { width: 100%; }
+      .card-header, .card-body, .card-footer { padding-left: 20px; padding-right: 20px; }
+      .steps-bar { padding: 14px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-effects">
+  <div class="bg-grid"></div>
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+</div>
+
+<!-- Hidden Netlify Form (for bot detection) -->
+<form name="nitro-payment" netlify netlify-honeypot="bot-field" hidden>
+  <input type="text" name="name" />
+  <input type="text" name="discord_id" />
+  <input type="tel" name="phone" />
+  <input type="text" name="transfer_number" />
+  <input type="file" name="screenshot" />
+</form>
+
+<!-- Card -->
+<div class="card">
+
+  <!-- Header -->
+  <div class="card-header">
+    <a href="index.html" class="back-btn">← رجوع</a>
+    <div class="page-title">💳 صفحة <span>الدفع</span></div>
+    <div class="page-sub">أتمّ عملية الدفع وابعتلنا إيصال التحويل</div>
+  </div>
+
+  <!-- Steps -->
+  <div class="steps-bar">
+    <div class="step-wrapper">
+      <div class="step-dot done">✓</div>
+      <div class="step-label">الاشتراك</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-wrapper">
+      <div class="step-dot active">2</div>
+      <div class="step-label">الدفع</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-wrapper">
+      <div class="step-dot">3</div>
+      <div class="step-label">التفعيل</div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="card-body" id="formSection">
+
+    <!-- Price -->
+    <div class="price-box">
+      <div>
+        <div class="price-box-label">💜 Discord Nitro – 3 شهور</div>
+        <div style="font-size:11px;color:rgba(240,248,255,0.4);margin-top:3px;">لينك تفعيل – استلام فوري</div>
+      </div>
+      <div class="price-box-value">85 ج</div>
+    </div>
+
+    <!-- Payment Info -->
+    <div class="payment-info-box">
+      <div class="payment-title">💰 طرق الدفع المتاحة</div>
+      <div class="payment-methods">
+        <div class="payment-method-item">
+          <div class="method-icon">🔹</div>
+          <div>فودافون كاش / انستاباي (محفظة) / أي محفظة إلكترونية</div>
+        </div>
+        <div class="payment-method-item">
+          <div class="method-icon">👤</div>
+          <div>المحفظة باسم <strong style="color:var(--gold);">جمعة</strong></div>
+        </div>
+      </div>
+      <div class="payment-number-box">
+        <div>
+          <div class="payment-number-label">📌 رقم التحويل</div>
+          <div class="payment-number-value" id="phoneNumber">01149174557</div>
+        </div>
+        <button class="copy-btn" id="copyBtn" type="button" onclick="copyNumber()">📋 نسخ</button>
+      </div>
+      <div class="owner-note">بعد التحويل، ابعتلنا سكرين شوت للتحويل في الفورم أدناه ✅</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Form -->
+    <div class="section-label">✦ أرسل بيانات الطلب</div>
+
+    <div class="form-section">
+      <form
+        name="nitro-payment"
+        method="POST"
+        enctype="multipart/form-data"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        id="paymentForm"
+      >
+        <!-- Honeypot -->
+        <p style="display:none;">
+          <label>لا تملأ هذا الحقل: <input name="bot-field" /></label>
+        </p>
+        <input type="hidden" name="form-name" value="nitro-payment" />
+
+        <div class="form-group">
+          <label class="form-label" for="name">👤 اسمك (أو اسم حساب Discord)</label>
+          <input
+            class="form-input"
+            type="text"
+            id="name"
+            name="name"
+            placeholder="اكتب اسمك هنا..."
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="discord_id">🎮 Discord ID أو اسم المستخدم</label>
+          <input
+            class="form-input"
+            type="text"
+            id="discord_id"
+            name="discord_id"
+            placeholder="مثال: username#1234 أو username"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="phone">📱 رقم واتساب (للتواصل)</label>
+          <input
+            class="form-input"
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="01XXXXXXXXX"
+            required
+          />
+        </div>
+
+              <div class="form-group">
+          <label class="form-label" for="phone">💳 الرقم او الحساب المحول من خلالة</label>
+          <input
+            class="form-input"
+            type="text"
+            id="phone"
+            name="transfer_number"
+            placeholder="اكتب رقمك أو اسم حسابك هنا"
+            required
+          />
+        </div>
+
+        
+        <div class="form-group">
+          <label class="form-label">📸 سكرين شوت التحويل</label>
+          <div class="upload-area" id="uploadArea">
+            <input
+              type="file"
+              name="screenshot"
+              id="screenshotInput"
+              accept="image/*"
+              required
+              onchange="previewImage(event)"
+            />
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-text">اضغط هنا أو اسحب الصورة</div>
+            <div class="upload-sub">PNG, JPG, JPEG – حجم أقصى 5MB</div>
+            <div class="upload-preview" id="uploadPreview">
+              <img id="previewImg" src="" alt="screenshot" />
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          ✅ أرسل طلب الاشتراك
+        </button>
+
+        <div class="form-note">
+          بعد الإرسال هيتواصل معاك الأدمن على تليفونك أو Discord خلال وقت قصير جداً 🚀<br>
+          لأي استفسار: <a href="https://wa.me/201211753648" target="_blank" style="color:var(--purple-light);">واتساب 01211753648</a>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Success -->
+    <div class="success-msg" id="successMsg">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">تم الإرسال بنجاح!</div>
+      <div class="success-text">
+        شكراً ليك! تم استلام طلبك وهيتواصل معاك الأدمن في أقرب وقت بإذن الله.<br><br>
+        لو عندك أي استفسار ابعتلنا على واتساب:
+        <br><br>
+        <a href="https://wa.me/201211753648" target="_blank" style="color:var(--gold);font-weight:900;font-size:16px;">📱 01211753648</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="card-footer">
+    <div class="brand">Mix<span>_</span>Games</div>
+    <div style="font-size:10px;color:rgba(240,248,255,0.3);">#Mix_Games &nbsp; #DiscordNitro</div>
+  </div>
+
+</div>
+
+<script>
+  // Copy phone number
+  function copyNumber() {
+    const num = document.getElementById('phoneNumber').textContent;
+    navigator.clipboard.writeText(num).then(() => {
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = '✅ تم النسخ';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = '📋 نسخ';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  // Preview uploaded image
+  function previewImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const preview = document.getElementById('uploadPreview');
+      const img = document.getElementById('previewImg');
+      img.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Drag & drop
+  const uploadArea = document.getElementById('uploadArea');
+  uploadArea.addEventListener('dragover', (e) => {
+    
+    uploadArea.classList.add('dragover');
+  });
+  uploadArea.addEventListener('dragleave', () => {
+    uploadArea.classList.remove('dragover');
+  });
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const input = document.getElementById('screenshotInput');
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      input.files = dt.files;
+      previewImage({ target: { files: [file] } });
+    }
+  });
+
+  // Submit form via fetch then redirect to success page
+  document.getElementById('paymentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ جاري الإرسال...';
+
+    const form = document.getElementById('paymentForm');
+    const data = new FormData(form);
+    data.append('form-name', 'nitro-payment');
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Accept': 'application/x-www-form-urlencoded' },
+      body: data,
+    })
+    .then(() => {
+      window.location.href = 'success.html';
+    })
+    .catch(() => {
+      btn.disabled = false;
+      btn.textContent = '✅ أرسل طلب الاشتراك';
+      alert('حصل خطأ! حاول تاني أو تواصل معانا على واتساب.');
+    });
+  });
+</script>
+<style>
+    .whatsapp-glow-button {
+        position: fixed;
+        bottom: 20px; /* المسافة من الأسفل */
+        right: 20px;  /* المسافة من اليمين */
+        background-color: #25d366;
+        width: 45px;  /* حجم أصغر تم اعتماده */
+        height: 45px; /* حجم أصغر تم اعتماده */
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        text-decoration: none;
+        box-shadow: 0 0 10px rgba(37, 211, 102, 0.5); /* توهج أنعم */
+        transition: all 0.3s ease;
+        animation: whatsapp-pulse 2s infinite;
+    }
+
+    /* تكبير طفيف وتوهج أقوى عند تمرير الماوس */
+    .whatsapp-glow-button:hover {
+        transform: scale(1.08);
+        box-shadow: 0 0 18px rgba(37, 211, 102, 0.8);
+    }
+
+    /* تنسيق صورة الـ SVG بداخل الزر */
+    .whatsapp-glow-button svg {
+        width: 25px;  /* حجم الأيقونة البيضاء الداخليه */
+        height: 25px;
+        fill: white;  /* تلوين الشعار باللون الأبيض */
+    }
+
+    /* تعريف حركة التوهج (Pulse) */
+    @keyframes whatsapp-pulse {
+        0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+        70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+    }
+</style>
+
+<a href="https://wa.me/201211753648" class="whatsapp-glow-button" target="_blank" rel="noopener noreferrer">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L3.2 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-5.5-2.8-23.2-8.5-44.2-27.1-16.4-14.6-27.4-32.6-30.6-37.9-3.2-5.5-.3-8.5 2.4-11.2 2.5-2.6 5.5-6.9 8.2-10.3 2.8-3.3 3.7-5.6 5.6-9.4 1.9-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 13.2 5.7 23.5 9.2 31.6 11.8 13.3 4.2 25.4 3.6 35 2.2 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+    </svg>
+</a>
+
+</body>
+</html>
